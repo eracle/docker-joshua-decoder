@@ -1,9 +1,8 @@
-FROM java:7
+FROM java:8
 MAINTAINER Aaron Glahe <aarongmldt@gmail.com>
 
 # Setup env
 USER root
-ENV JAVA_HOME /usr/lib/jvm/java-1.7.0-openjdk-amd64
 
 # Download ant, hadoop & joshua decoder:
 RUN wget -q -O - http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz | tar -xzf - -C /usr/local
