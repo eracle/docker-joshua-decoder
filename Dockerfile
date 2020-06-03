@@ -1,39 +1,25 @@
-FROM java:8
-MAINTAINER Aaron Glahe <aarongmldt@gmail.com>
+FROM openjdk:8
+MAINTAINER Antonio Ercole De Luca <eracle@posteo.eu>
 
 # Setup env
 USER root
-
-# Download ant, hadoop & joshua decoder:
-RUN wget -q -O - http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz | tar -xzf - -C /usr/local
-RUN ln -s /usr/local/apache-ant-1.9.6 /usr/local/ant
-ENV ANT_HOME /usr/local/ant
-
-RUN wget -q -O - http://apache.mirrors.pair.com/hadoop/common/hadoop-2.7.1/hadoop-2.7.1.tar.gz | tar -xzf - -C /usr/local
-RUN ln -s /usr/local/hadoop-2.7.1 /usr/local/hadoop
-ENV HADOOP /usr/local/hadoop
-
-RUN wget -q -O - http://cs.jhu.edu/~post/files/joshua-6.0.5.tgz | tar -xzf - -C /usr/local
-RUN ln -s /usr/local/joshua-6.0.5 /usr/local/joshua
-ENV JOSHUA /usr/local/joshua
 
 # Install other build dependencies:
 RUN \
   apt-get update && \
   apt-get install -y \
-    cmake=3.0.2-1 \
-    gcc=4:4.9.2-2 \
-    g++=4:4.9.2-2 \
-    libboost-all-dev=1.55.0.2 \
-    make=4.0-8.1 \
-    zlib1g-dev=1:1.2.8.dfsg-2+b1
+    cmake \
+    gcc \
+    g++ \
+    libboost-all-dev \
+    make \
+    zlib1g-dev
 
 WORKDIR /usr/local/joshua
-RUN ${ANT_HOME}/bin/ant
 
 #Ports:
 EXPOSE 5674
 
-RUN wget -q -O - http://cs.jhu.edu/~post/language-packs/language-pack-ar-en-phrase-2015-03-18.tgz | tar -xzf - -C /usr/local
-WORKDIR /usr/local/language-pack-ar-en-phrase-2015-03-18
-CMD ["./run-joshua.sh"]
+RUN wget -q -O - "https://ucbc039f0dd6bf798014dfcc7b71.dl.dropboxusercontent.com/cd/0/get/A4-dzL_s1BU3q-vId5AOYXEKQ-lv0FgVrObrjYfzp0i-F_RgCy2Eqr1lEs-WlI810pNcJ9giWvAhNptWCmNTqUB3rUztXokXxedTpCDvGN4UuA/file?_download_id=90100557251024334217239657756984195127217415196343431756561034296&_notify_domain=www.dropbox.com&dl=1" | tar -xzf - -C /usr/local
+WORKDIR /usr/local/apache-joshua-it-en-2016-11-18
+CMD ["./joshua", "-server-port", "5674", "-server-type", "http"]

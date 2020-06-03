@@ -1,4 +1,6 @@
 joshua:
   build: .
-  entrypoint:
-    - /usr/local/language-pack-ar-en-phrase-2015-03-18/run-joshua.sh
+  entrypoint: ["./joshua", "-server-port", "5674", "-server-type", "http"]
+  ports:
+    - "5674:5674"
+
